@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from core.models import Base, db_helper
+from api import router as api_router
+from core.settings import settings
 
 
 @asynccontextmanager
@@ -13,6 +15,7 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(router=api_router, prefix=settings.api_prefix)
 
 @app.get('/')
 def read_root(name: str = "Luna-Corn"):
