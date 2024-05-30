@@ -13,13 +13,13 @@ router = APIRouter(tags=["Students"])
 #ALL students
 @router.get("/", response_model=list[StudentSchema])
 async def get_students(
-    session: AsyncSession = Depends(db_helper.session_dependency),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     return await crud.get_students(session=session)
 
 #One student
 @router.get("/{student_id}/", response_model=StudentSchema)
-async def get_student(student: Student_model = Depends(student_by_id)):
+async def get_student(student: StudentSchema = Depends(student_by_id)):
     return student
 
 #Create student
@@ -34,3 +34,13 @@ async def create_student(
 ):
     return await crud.create_student(session=session, student_in=student_in)
 
+#Delete
+@router.delete(
+    "/{product_id}/", 
+    status_code=status.HTTP_204_NO_CONTENT,
+    )
+async def delete_product(
+    student: StudentSchema = Depends(student_by_id),
+    session: AsyncSession = Depends(db_helper.session_dependency),
+)-> None:
+    await crud.delete_student(session=session, student=student)

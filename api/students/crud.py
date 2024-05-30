@@ -26,3 +26,11 @@ async def create_student(session: AsyncSession, student_in: StudentCreate) -> St
     session.add(student)
     await session.commit()
     return student
+
+#Delete
+async def delete_student(
+        session: AsyncSession,
+        student: Student,
+)-> None:
+    await session.delete(student)
+    await session.commit()
