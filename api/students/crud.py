@@ -3,7 +3,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models import Student
-from .schemas import StudentCreate
+from .schemas import StudentCreate, StudentUpdate, StudentUpdateePartial
 
 
 
@@ -34,3 +34,15 @@ async def delete_student(
 )-> None:
     await session.delete(student)
     await session.commit()
+
+#Update put & patch
+async def update_student(
+        session: AsyncSession, 
+        student: Student, 
+        student_update: StudentUpdate | StudentUpdateePartial,
+        partial: bool = False
+) -> Student:
+    for name, value in student_update.model_dump(exclude_unset=partial).items():
+        setattr(student, name, value)
+    await session.commit()
+    return student

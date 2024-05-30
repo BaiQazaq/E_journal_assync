@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from . import crud
-from .schemas import Student as StudentSchema, StudentCreate
+from .schemas import Student as StudentSchema, StudentCreate, StudentUpdate, StudentUpdateePartial
 from core.models import db_helper, Student as Student_model
 
 from .students_dep import student_by_id
@@ -36,7 +36,7 @@ async def create_student(
 
 #Delete
 @router.delete(
-    "/{product_id}/", 
+    "/{student_id}/", 
     status_code=status.HTTP_204_NO_CONTENT,
     )
 async def delete_product(
@@ -44,3 +44,31 @@ async def delete_product(
     session: AsyncSession = Depends(db_helper.session_dependency),
 )-> None:
     await crud.delete_student(session=session, student=student)
+
+
+#Update put
+@router.put("/{student_id}/")
+async def update_product(
+    student_update: StudentUpdate,
+    student: StudentSchema = Depends(student_by_id),
+    session: AsyncSession = Depends(db_helper.session_dependency),
+):
+    return await crud.update_student(
+        session=session,
+        student=student,
+        student_update=student_update,
+    )
+
+#Update patch
+@router.patch("/{student_id}/")
+async def update_product(
+    student_update: StudentUpdateePartial,
+    student: StudentSchema = Depends(student_by_id),
+    session: AsyncSession = Depends(db_helper.session_dependency),
+):
+    return await crud.update_student(
+        session=session,
+        student=student,
+        student_update=student_update,
+        partial=True,
+    )
