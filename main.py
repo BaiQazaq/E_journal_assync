@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from core.models import Base, db_helper
-from api import router as api_router
+from api import students_router as api_router
 from core.settings import settings
 
 

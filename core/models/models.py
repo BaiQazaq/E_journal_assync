@@ -7,7 +7,7 @@ class Student(Base):
     
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
-    scores = relationship("Score", back_populates="student", cascade="all, delete-orphan")
+    scores = relationship("Score", back_populates="student", cascade="all, delete-orphan", )
 
 class Score(Base):
     __tablename__ = "scores"
