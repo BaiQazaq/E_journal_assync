@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from core.models import Base, db_helper
-from api import students_router as api_router
+from api import students_router, score_router
 from core.settings import settings
 
 
@@ -15,7 +15,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(router=api_router, prefix=settings.api_prefix)
+app.include_router(router=students_router, prefix=settings.api_prefix)
+app.include_router(router=score_router, prefix=settings.api_prefix)
 
 @app.get('/')
 def read_root(name: str = "Luna-Corn"):
